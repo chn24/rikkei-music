@@ -6,11 +6,28 @@ import Button from 'react-bootstrap/Button'
 import { BsXSquare } from 'react-icons/bs'
 import { useEffect, useRef } from 'react'
 import { getTime } from '../../../../utils/convert'
+import { musicPropsType } from '../../../../utils/interfaces/list';
 import axios from 'axios'
 
 interface props {
   setFormToggle : React.Dispatch<React.SetStateAction<Boolean>>;
-  list : Object[];
+  musicList : musicPropsType[];
+}
+
+interface formikProps {
+  link: string
+  message: string
+  songName: string
+  receiver: string
+  sender: string
+}
+
+const initialValues : formikProps = {
+      link: '',
+      songName: '',
+      message: '',
+      sender: '',
+      receiver: '',
 }
 
 const validationSchema = yup.object({
@@ -27,18 +44,12 @@ const validationSchema = yup.object({
   receiver: yup.string(),
 })
 
-const OrderForm : React.FC<props> = ({setFormToggle, list}) => {
+const OrderForm : React.FC<props> = ({setFormToggle, musicList}) => {
   const formik = useFormik({
-    initialValues: {
-      link: '',
-      songName: '',
-      message: '',
-      sender: '',
-      receiver: '',
-    },
+    initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values)
+      //console.log(values)
       handleOrder(values)
     },
   })
@@ -61,11 +72,16 @@ const OrderForm : React.FC<props> = ({setFormToggle, list}) => {
       })
   }
 
-  const handleOrder = (values: object) => {
-    let arr = [...list]
+  const handleOrder = (values: formikProps) => {
+    let arr = [...musicList]
     
-    let time : String = getTime()
-    arr.unshift({...values, time})
+    let time : string = getTime()
+    let newOrder: musicPropsType = {
+      ...values,
+      time,
+    }
+    arr.unshift(newOrder)
+    
     putList(arr)
     
   }

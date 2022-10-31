@@ -1,15 +1,16 @@
 import React from 'react';
 import ListItem from "./ListItem"
+import { musicPropsType } from '../../../../utils/interfaces/list'
 
 interface propsType {
-    list : Object[];
+    musicList : musicPropsType[]
 }
 
-const List : React.FC<propsType> = ({list}) => {
+const List : React.FC<propsType> = ({musicList}) => {
   return (
     <div className="content-musicList">
       <div className="content-musicList-listBox">
-        {list.map((music , index) => {
+        {musicList.map((music , index) => {
           return <ListItem key={index} music ={music} />;
         })}
       </div>
