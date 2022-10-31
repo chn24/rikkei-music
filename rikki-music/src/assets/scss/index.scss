@@ -1,0 +1,21 @@
+// @tailwind base;
+// @tailwind components;
+// @tailwind utilities;
+
+@import "./components/layout/header/index.scss";
+@import "./components/screens/landingPage/index.scss";
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+/// linear-gradient(287deg, #a36c6c73, #f100005c)
+#root {
+    background: #000120;
+    overflow: hidden;
+}
+
+#layout {
+    background: linear-gradient(287deg, #a36c6c73, #f100005c);
+}
+
+.errorText {
+    color: #bb2327;
+}
