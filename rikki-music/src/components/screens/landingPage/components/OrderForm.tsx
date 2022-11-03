@@ -6,12 +6,13 @@ import Button from 'react-bootstrap/Button'
 import { BsXSquare } from 'react-icons/bs'
 import { useEffect, useRef } from 'react'
 import { getTime } from '../../../../utils/convert'
-import { musicPropsType } from '../../../../utils/interfaces/list';
+import { musicPropsType } from '../../../../utils/interfaces/list'
+import { putList } from '../../../../hook/callAPI/api'
 import axios from 'axios'
 
 interface props {
-  setFormToggle : React.Dispatch<React.SetStateAction<Boolean>>;
-  musicList : musicPropsType[];
+  setFormToggle: React.Dispatch<React.SetStateAction<Boolean>>
+  musicList: musicPropsType[]
 }
 
 interface formikProps {
@@ -22,12 +23,12 @@ interface formikProps {
   sender: string
 }
 
-const initialValues : formikProps = {
-      link: '',
-      songName: '',
-      message: '',
-      sender: '',
-      receiver: '',
+const initialValues: formikProps = {
+  link: '',
+  songName: '',
+  message: '',
+  sender: '',
+  receiver: '',
 }
 
 const validationSchema = yup.object({
@@ -44,12 +45,11 @@ const validationSchema = yup.object({
   receiver: yup.string(),
 })
 
-const OrderForm : React.FC<props> = ({setFormToggle, musicList}) => {
+const OrderForm: React.FC<props> = ({ setFormToggle, musicList }) => {
   const formik = useFormik({
     initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      //console.log(values)
       handleOrder(values)
     },
   })
@@ -58,60 +58,55 @@ const OrderForm : React.FC<props> = ({setFormToggle, musicList}) => {
   const formRef = useRef<HTMLFormElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
 
-  const putList = async (arr : Object[]) => {
-    const data = {
-      list : arr,
-    }
-    await axios.put('https://6316fc9e82797be77fefdcfc.mockapi.io/musicList/1',data)
-    .then(() => {
-      setFormToggle(false)
-    })
-      .catch((error) => {
-        console.log(error);
-        
-      })
-  }
-
   const handleOrder = (values: formikProps) => {
+    const putData = async (data: object) => {
+      await putList(data).then(() => {
+        setFormToggle(false)
+      })
+    }
+
     let arr = [...musicList]
-    
-    let time : string = getTime()
+
+    let time: string = getTime()
     let newOrder: musicPropsType = {
       ...values,
       time,
     }
     arr.unshift(newOrder)
-    
-    putList(arr)
-    
+
+    const data = {
+      list: arr,
+    }
+
+    putData(data)
   }
-  
+
   useEffect(() => {
-    const RefStopPstopPropagation = (e : Event) => {
-      e.stopPropagation();
-    };
+    const RefStopPstopPropagation = (e: Event) => {
+      e.stopPropagation()
+    }
 
     const handleBtnClose = () => {
-      setFormToggle(false);
-    };
-  
+      setFormToggle(false)
+    }
+
     const handleFormBoxClose = () => {
-      setFormToggle(false);
-    };
+      setFormToggle(false)
+    }
 
-    const coppyFormBoxRef = {...formBoxRef}
-    const coppyFormRef = {...formRef}
-    const coppyBtnRef = {...btnRef}
+    const coppyFormBoxRef = { ...formBoxRef }
+    const coppyFormRef = { ...formRef }
+    const coppyBtnRef = { ...btnRef }
 
-    coppyFormBoxRef.current?.addEventListener("click", handleFormBoxClose);
-    coppyFormRef.current?.addEventListener("click", RefStopPstopPropagation);
-    coppyBtnRef.current?.addEventListener("click", handleBtnClose);
+    coppyFormBoxRef.current?.addEventListener('click', handleFormBoxClose)
+    coppyFormRef.current?.addEventListener('click', RefStopPstopPropagation)
+    coppyBtnRef.current?.addEventListener('click', handleBtnClose)
     return () => {
-      coppyFormBoxRef.current?.removeEventListener("click", handleFormBoxClose);
-      coppyFormRef.current?.removeEventListener("click", RefStopPstopPropagation);
-      coppyBtnRef.current?.removeEventListener("click", handleBtnClose);
-    };
-  },[])
+      coppyFormBoxRef.current?.removeEventListener('click', handleFormBoxClose)
+      coppyFormRef.current?.removeEventListener('click', RefStopPstopPropagation)
+      coppyBtnRef.current?.removeEventListener('click', handleBtnClose)
+    }
+  }, [])
 
   return (
     <div ref={formBoxRef} className="formBox">

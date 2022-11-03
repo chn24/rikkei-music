@@ -47,7 +47,8 @@
 
   &-musicList {
     &-listBox{
-      width: 50%;
+      width: 75%;
+      margin: 0px auto;
       
       &-item {
         padding: 16px;
@@ -55,6 +56,42 @@
         flex-direction: row;
       }
     }
+  }
+}
+
+tbody > tr:hover > td {
+  color: #fff !important;
+}
+
+tbody > tr:hover  img {
+  transform: rotate(10deg);
+  transition:  0.5s;
+  // animation: trhover 0.5s linear;
+}
+
+td,
+th {
+  color: #fff;
+}
+
+th {
+  font-size:  24px;
+  font-weight: 500;
+}
+
+td > a {
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+@keyframes trhover {
+  0% {
+    transform:  rotate(0);
+  }
+
+  100% {
+    transform: rotate(10deg);
   }
 }
 
@@ -71,7 +108,7 @@
 
 //------------------------------------------------------------
 .formBox {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;

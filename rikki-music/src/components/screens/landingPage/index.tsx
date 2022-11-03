@@ -7,28 +7,18 @@ import { useState } from 'react'
 import axios from 'axios'
 import { musicPropsType } from '../../../utils/interfaces/list'
 
-//import { getList } from '../../../hook/callAPI/api'
+import { getList } from '../../../hook/callAPI/api'
 
 const LandingPageScreen = () => {
   const [formToggle, setFormToggle] = useState<Boolean>(false)
   const [musicList, setMusicList] = useState<musicPropsType[]>([])
-
-  const getList = async () => {
-    await axios.get('https://6316fc9e82797be77fefdcfc.mockapi.io/musicList/1')
-      .then((response) => {
-        setMusicList(response.data.list)
-      })
-      .catch((error) => {
-        console.log(error);
-        
-      })
-  }
-
-  console.log( musicList);
   
-
   useEffect(() => {
-    getList()
+    const getData = async () => {
+      const a = await getList()
+      setMusicList(a.list)
+    }
+    getData()
   },[])
 
   const handleOrder = () => {
