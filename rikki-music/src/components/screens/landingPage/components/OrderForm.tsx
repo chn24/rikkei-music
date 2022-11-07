@@ -5,10 +5,11 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { BsXSquare } from 'react-icons/bs'
 import { useEffect, useRef } from 'react'
-import { getTime } from '../../../../utils/convert'
+import { getTime, getParam } from '../../../../utils/convert'
 import { musicPropsType } from '../../../../utils/interfaces/list'
 import { putList } from '../../../../hook/callAPI/api'
-import axios from 'axios'
+import { officeState } from '../../../../store/idParam'
+import { useRecoilValue } from "recoil";
 
 interface props {
   setFormToggle: React.Dispatch<React.SetStateAction<Boolean>>
@@ -58,9 +59,11 @@ const OrderForm: React.FC<props> = ({ setFormToggle, musicList }) => {
   const formRef = useRef<HTMLFormElement>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
 
+  const idParam = useRecoilValue(officeState)
+
   const handleOrder = (values: formikProps) => {
-    const putData = async (data: object) => {
-      await putList(data).then(() => {
+    const putData = async (data: object, id : number) => {
+      await putList(data, id).then(() => {
         setFormToggle(false)
       })
     }
@@ -68,9 +71,11 @@ const OrderForm: React.FC<props> = ({ setFormToggle, musicList }) => {
     let arr = [...musicList]
 
     let time: string = getTime()
+    let param: string | null = getParam(values.link)
     let newOrder: musicPropsType = {
       ...values,
       time,
+      param,
     }
     arr.unshift(newOrder)
 
@@ -78,7 +83,7 @@ const OrderForm: React.FC<props> = ({ setFormToggle, musicList }) => {
       list: arr,
     }
 
-    putData(data)
+    putData(data, idParam)
   }
 
   useEffect(() => {

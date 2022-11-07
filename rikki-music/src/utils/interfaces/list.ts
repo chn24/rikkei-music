@@ -5,6 +5,7 @@ export interface musicPropsType {
   receiver: string
   sender: string
   time: string
+  param : string | null
 }
 
 export interface songType {

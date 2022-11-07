@@ -8,7 +8,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />}></Route>
+        <Route path="/" element={<LandingPage />}>
+          <Route path=':officeId' element={<LandingPage/>}></Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );

@@ -1,4 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { officeState } from '../../../store/idParam';
+import {  useRecoilState } from 'recoil'
 
 const officeList = [
     {
@@ -29,6 +32,18 @@ const officeList = [
   ];
 
   const Header = () => {
+
+    const [searchParams, setSearchParams] = useSearchParams()
+    const {officeId} = useParams()
+    const [idParam,setIdParam] = useRecoilState(officeState)
+    const navigate = useNavigate()
+
+    const handleChangePlace = (e: React.MouseEvent, id : number) => {
+      e.preventDefault()
+      navigate(`/${id}`)
+      setIdParam(id)
+    }
+
     return (
         <div className="header">
           <div className="header-container container">
@@ -36,7 +51,7 @@ const officeList = [
             <div className="header-offices">
               {officeList.map((office) => {
                 return (
-                  <a href="#" className="header-offices-link" key={office.id}>
+                  <a href="#" className={`header-offices-link ${idParam === office.id ? 'active' : null}`} defaultValue={office.id} key={office.id} onClick={(e, id = office.id) => handleChangePlace(e, id)}>
                     {office.name}
                   </a>
                 );

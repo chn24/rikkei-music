@@ -8,18 +8,32 @@ import axios from 'axios'
 import { musicPropsType } from '../../../utils/interfaces/list'
 
 import { getList } from '../../../hook/callAPI/api'
+import { useRecoilValue } from "recoil";
+import { officeState } from '../../../store/idParam'
+import { useParams } from 'react-router-dom'
 
 const LandingPageScreen = () => {
   const [formToggle, setFormToggle] = useState<Boolean>(false)
   const [musicList, setMusicList] = useState<musicPropsType[]>([])
+  const idParam = useRecoilValue(officeState)
+  const {officeId} = useParams()
   
   useEffect(() => {
-    const getData = async () => {
-      const a = await getList()
+    
+    const getData = async (id: number) => {
+      const a = await getList(id)
       setMusicList(a.list)
     }
-    getData()
-  },[])
+
+    if(officeId) {
+    const id : number = Number(officeId)
+    console.log('Efffect', idParam)
+    getData(id)
+    } else {
+      getData(6)
+    }
+    
+  }, [officeId])
 
   const handleOrder = () => {
     setFormToggle(true)
