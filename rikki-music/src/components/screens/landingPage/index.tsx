@@ -44,7 +44,7 @@ const LandingPageScreen = () => {
     <div className="content">
       <Dj />
       <div className="content-order">
-        <Button onClick={handleOrder}>DJ cho tôi order bài nhạc</Button>
+        <Button onClick={handleOrder}>Dân chơi muốn order bài nào</Button>
       </div>
       {formToggle ? (
         <OrderForm
